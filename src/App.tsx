@@ -1,14 +1,33 @@
 import { useState } from "react";
+import { GoCheckCircleFill, GoCircle } from "react-icons/go";
+
+type Task = {
+  text: string;
+  completed: boolean;
+};
 
 function App() {
   const [inputValue, setInputValue] = useState<string>("");
-  const [tasks, setTasks] = useState<string[]>([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [allTasks, setAllTasks] = useState(true);
+  const [allCompletedTasks, setAllCompletedTasks] = useState(false);
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
   };
   const handleAddBtn = () => {
-    setTasks((prev) => [...prev, inputValue]);
+    setTasks((prev) => [{ text: inputValue, completed: false }, ...prev]);
     setInputValue("");
+  };
+  const handleDelete = (index: number) => {
+    setTasks((prev) => prev.filter((_, i) => i != index));
+  };
+
+  const toggleTask = (index: number) => {
+    setTasks((prev) =>
+      prev.map((task, i) =>
+        i === index ? { ...task, completed: !task.completed } : task
+      )
+    );
   };
 
   return (
@@ -27,19 +46,88 @@ function App() {
         <button
           type="button"
           className="border-2 border-black px-4"
-          onClick={handleAddBtn}
+          onClick={() => handleAddBtn()}
         >
           Add
         </button>
       </div>
-      <div>
-        {tasks.map((task) => (
-          <div className=" flex gap-2">
-            <div>{task}</div>
-            <div> delete</div>
-          </div>
-        ))}
-      </div>
+    { tasks.length>0 && <div className="flex items-center gap-4">
+        <p
+          onClick={() => {
+            setAllTasks(true);
+            setAllCompletedTasks(false);
+          }}
+          className={`cursor-pointer pb-1 ${
+            allTasks
+              ? "border-b-4 border-blue-500"
+              : "border-b-4 border-transparent"
+          }`}
+        >
+          All Tasks
+        </p>
+        <p
+          onClick={() => {
+            setAllTasks(false);
+            setAllCompletedTasks(true);
+          }}
+          className={`cursor-pointer pb-1 ${
+            allCompletedTasks
+              ? "border-b-4 border-blue-500"
+              : "border-b-4 border-transparent"
+          }`}
+        >
+          Completed Tasks
+        </p>
+      </div>}
+      {allTasks && (
+        <div>
+          {tasks.map((task, index) => (
+            <div key={index} className=" flex gap-2 items-center">
+              <div
+                onClick={() => {
+                  toggleTask(index);
+                }}
+                className={`cursor-pointer`}
+              >
+                {task.completed ? <GoCheckCircleFill /> : <GoCircle />}
+              </div>
+              <div
+                className={`${
+                  task.completed ? "line-through" : ""
+                } cursor-pointer`}
+              >
+                {task.text}
+              </div>
+              <div
+                className="text-red-500 hover:cursor-pointer"
+                onClick={() => handleDelete(index)}
+              >
+                {" "}
+                delete
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+      {allCompletedTasks && (
+        <div>
+          {tasks
+            .filter((task) => task.completed)
+            .map((task, index) => (
+              <div key={index} className="flex gap-2 items-center">
+                <GoCheckCircleFill />
+                <div className="line-through cursor-pointer">{task.text}</div>
+                <div
+                  className="text-red-500 hover:cursor-pointer"
+                  onClick={() => handleDelete(index)}
+                >
+                  {" "}
+                  delete
+                </div>
+              </div>
+            ))}
+        </div>
+      )}
     </>
   );
 }
