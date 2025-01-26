@@ -1,35 +1,47 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [inputValue, setInputValue] = useState<string>("");
+  const [tasks, setTasks] = useState<string[]>([]);
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+  };
+  const handleAddBtn = () => {
+    setTasks((prev) => [...prev, inputValue]);
+    setInputValue("");
+  };
 
   return (
     <>
       <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <h1 className="m-4 text-3xl">QuickTask</h1>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
+      <div className="m-4 flex gap-2">
+        <input
+          type="text"
+          value={inputValue}
+          className="border-2 border-black"
+          onChange={handleInputChange}
+          placeholder="Enter your task"
+        />
+        <button
+          type="button"
+          className="border-2 border-black px-4"
+          onClick={handleAddBtn}
+        >
+          Add
         </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <div>
+        {tasks.map((task) => (
+          <div className=" flex gap-2">
+            <div>{task}</div>
+            <div> delete</div>
+          </div>
+        ))}
+      </div>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
