@@ -1,3 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,500;1,500&family=Quicksand:wght@600&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+body{
+    background-color: #C9E6F0;
+}
+
+.montserrat-500 {
+    font-family: "Montserrat", serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+  }
+
+  .quicksand-600 {
+    font-family: "Quicksand", serif;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: normal;
+  }
+  .gradient-background {
+    background: linear-gradient(290deg,#5fa8d3,#bee9e8);
+    background-size: 120% 120%;
+    animation: gradient-animation 8s ease infinite;
+  }
+  
+  @keyframes gradient-animation {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
